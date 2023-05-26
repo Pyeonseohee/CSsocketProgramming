@@ -2,8 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\SocketProgramming",
-    "\\SocketProgramming\\Server"
+    "\\SocketProgramming\\Client",
+    "\\SocketProgramming\\Server",
+    "\\SocketProgramming\\SocketProgramming"
   ],
-  "SelectedNode": "\\SocketProgramming",
+  "SelectedNode": "\\SocketProgramming\\Server\\Program.cs",
   "PreviewInSolutionExplorer": false
 }
