@@ -26,9 +26,11 @@ namespace Server
             {
                 try
                 {
+                    Console.WriteLine("start....");
                     serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                     IPEndPoint serverEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), serverPort);
                     serverSocket.Bind(serverEP); // 서버소켓에 ip, port 할당
+                    Console.WriteLine("success bind!!!!!!");
                     serverSocket.Listen(10); // 클라이언트의 연결 요청을 대기 상태로 만듦. 백로그 큐 = 클라이언트들의 연결 요처 대기실
                     
                     Socket clientSocket = serverSocket.Accept();
@@ -46,11 +48,6 @@ namespace Server
                         clientSocket.Send(buffer, 0, n, SocketFlags.None); // echo
                         clientSocket.Close();
                     }
-
-
-
-                    
-
                     //serverSocket.BeginAccept(AcceptCallback, null);
                 }
                 catch (Exception e)
