@@ -10,7 +10,7 @@ namespace Server1
         static void Main()
         {
             // 서버의 IP 주소와 포트 번호
-            string ipAddress = "52.206.228.119";
+            string ipAddress = "127.0.0.1";
             int port = 50000;
 
             try
