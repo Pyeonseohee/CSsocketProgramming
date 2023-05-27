@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Owner\\Desktop\\gachon\\SocketTest1\\Server1\\Server1.csproj": {}
+    "C:\\Users\\Owner\\Desktop\\Github\\CSsocketProgramming\\SocketTest1\\Server1\\Server1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Owner\\Desktop\\gachon\\SocketTest1\\Server1\\Server1.csproj": {
+    "C:\\Users\\Owner\\Desktop\\Github\\CSsocketProgramming\\SocketTest1\\Server1\\Server1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Owner\\Desktop\\gachon\\SocketTest1\\Server1\\Server1.csproj",
+        "projectUniqueName": "C:\\Users\\Owner\\Desktop\\Github\\CSsocketProgramming\\SocketTest1\\Server1\\Server1.csproj",
         "projectName": "Server1",
-        "projectPath": "C:\\Users\\Owner\\Desktop\\gachon\\SocketTest1\\Server1\\Server1.csproj",
+        "projectPath": "C:\\Users\\Owner\\Desktop\\Github\\CSsocketProgramming\\SocketTest1\\Server1\\Server1.csproj",
         "packagesPath": "C:\\Users\\Owner\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Owner\\Desktop\\gachon\\SocketTest1\\Server1\\obj\\",
+        "outputPath": "C:\\Users\\Owner\\Desktop\\Github\\CSsocketProgramming\\SocketTest1\\Server1\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

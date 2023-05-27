@@ -12,6 +12,7 @@ namespace Server1
 
             //서버쪽 대기 시작하는코드
             Server server = new Server();
+            Console.WriteLine("server wait...");
             server.Start();
             server.Close();
         }
@@ -27,7 +28,7 @@ namespace Server1
                 {
                     Console.WriteLine("start....");
                     serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    IPEndPoint serverEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), serverPort);
+                    IPEndPoint serverEP = new IPEndPoint(IPAddress.Any, serverPort);
                     serverSocket.Bind(serverEP); // 서버소켓에 ip, port 할당
                     Console.WriteLine("success bind!!!!!!");
                     serverSocket.Listen(10); // 클라이언트의 연결 요청을 대기 상태로 만듦. 백로그 큐 = 클라이언트들의 연결 요처 대기실
