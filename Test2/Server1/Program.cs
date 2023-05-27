@@ -14,9 +14,9 @@ namespace Server1
             int port = 50000;
 
             try
-            {
+            { 
                 // 서버 소켓 생성
-                TcpListener server = new TcpListener(IPAddress.Parse(ipAddress), port);
+                TcpListener server = new TcpListener(IPAddress.Any, port);
 
                 // 클라이언트 연결 대기
                 server.Start();

@@ -10,7 +10,7 @@ namespace Client1
         static void Main()
         {
             // EC2 인스턴스의 IP 주소와 포트 번호
-            string ipAddress = "52.206.228.119";
+            string ipAddress = "3.38.94.101";
             int port = 50000;
             Console.WriteLine("시작합니다!");
             try
