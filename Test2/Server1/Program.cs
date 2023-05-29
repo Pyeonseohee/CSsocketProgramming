@@ -25,7 +25,7 @@ namespace Server1
 
                 // 클라이언트 연결 대기
                 server.Start();
-                Console.WriteLine("서버가 시작되었습니다. 클라이언트 연결 대기 중...");
+                Console.WriteLine("server start... waiting Client");
 
                 while (true)
                 {
@@ -39,13 +39,12 @@ namespace Server1
 
                 // 클라이언트 연결 수락
                 TcpClient client = server.AcceptTcpClient();
-                Console.WriteLine("클라이언트가 연결되었습니다.");
+                Console.WriteLine("Connection to client!");
 
 
                 void HandleClient(object clientObj)
                 {
                     TcpClient client = (TcpClient)clientObj;
-                    Console.WriteLine("클라이언트 연결됨: " + client.Client.RemoteEndPoint);
 
                     // 클라이언트와의 데이터 통신 처리
                     NetworkStream stream = client.GetStream();
@@ -76,7 +75,7 @@ namespace Server1
                     }
 
                     // 클라이언트와의 연결 종료
-                    Console.WriteLine("클라이언트 연결 종료: " + client.Client.RemoteEndPoint);
+                    Console.WriteLine("client " + client.Client.RemoteEndPoint + "end");
                     client.Close();
                 }
 
@@ -95,12 +94,12 @@ namespace Server1
             string StringToConnection = "Server=nowmsm-db.cirkkpu5fv9s.us-east-1.rds.amazonaws.com;Database=nowMSM;Uid=admin;Pwd=00000000;";
             using (MySqlConnection conn = new MySqlConnection(StringToConnection))
             {
-                Console.Write("커넥션 성공!");
+                Console.Write("success connection!");
                 try
                 {
                     conn.Open();
                     string InsertQuery = $"insert into user(id, name, pw) values('{jsonData.ID}', '{jsonData.NAME}', '{jsonData.PWD}')";
-                    Console.Write("데이터 insert 시작!");
+                    Console.Write("SQL insert start!");
 
                     // command connection
                     MySqlCommand cmd = new MySqlCommand(InsertQuery, conn);
@@ -108,11 +107,11 @@ namespace Server1
                     // 만약에 내가처리한 Mysql에 정상적으로 들어갔다면 메세지를 보여주라는 뜻
                     if (cmd.ExecuteNonQuery() == 1)
                     {
-                        Console.Write("Insert 완료!");
+                        Console.Write("Insert success!");
                     }
                     else
                     {
-                        Console.Write("Insert 실패!");
+                        Console.Write("Insert error!");
                     }
                 }catch(Exception e)
                 {

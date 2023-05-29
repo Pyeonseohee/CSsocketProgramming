@@ -21,8 +21,8 @@ namespace Client1
         static void Main()
         {
             // EC2 인스턴스의 IP 주소와 포트 번호
-            //string ipAddress = "52.206.228.119";
-            string ipAddress = "127.0.0.1";
+            string ipAddress = "52.206.228.119";
+            //string ipAddress = "127.0.0.1";
             int port = 50000;
             TcpClient client = null;
             Console.WriteLine("Client Console.");
@@ -31,9 +31,9 @@ namespace Client1
                 RegisterObject data = new RegisterObject
                 {
                     ROUTE = "Register",
-                    ID = "pshsh9234",
-                    NAME = "Pyeonseohee",
-                    PWD = "123456789"
+                    ID = "test1",
+                    NAME = "test1",
+                    PWD = "test1"
                 };
                 string jsonString = JsonSerializer.Serialize(data); // object -> json
                 Console.WriteLine(jsonString);
