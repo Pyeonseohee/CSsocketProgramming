@@ -4,6 +4,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
+using MySql.Data.MySqlClient;
+using System.Collections.Specialized;
+using System.Text.Json.Nodes;
 
 namespace Server1
 {
@@ -16,7 +19,7 @@ namespace Server1
             int port = 50000;
 
             try
-            { 
+            {
                 // 서버 소켓 생성
                 TcpListener server = new TcpListener(IPAddress.Any, port);
 
@@ -54,15 +57,14 @@ namespace Server1
                         // 수신한 데이터 처리
                         string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
-                        var jsonObject = JsonConvert.DeserializeObject<dynamic>(data);
-                        Console.WriteLine(jsonObject);
-                        if (jsonObject.Route == "Login")
+                        dynamic jsonObject = JsonConvert.DeserializeObject<dynamic>(data);
+                        if (jsonObject.ROUTE == "Login") // Login이면
                         {
-                            LoginHandler();
+                            LoginHandler(jsonObject);
                         }
-                        else if (jsonObject.Route == "Register")
+                        else if (jsonObject.ROUTE == "Register") // Register이면
                         {
-                            RegisterHandler();
+                            RegisterHandler(jsonObject);
                         }
                         else
                         {
@@ -86,16 +88,51 @@ namespace Server1
 
             Console.ReadLine();
         }
+
+        public static void SQLConnect(dynamic jsonData)
+        {
+            // RDS 서버에 접속
+            string StringToConnection = "Server=nowmsm-db.cirkkpu5fv9s.us-east-1.rds.amazonaws.com;Database=nowMSM;Uid=admin;Pwd=00000000;";
+            using (MySqlConnection conn = new MySqlConnection(StringToConnection))
+            {
+                Console.Write("커넥션 성공!");
+                try
+                {
+                    conn.Open();
+                    string InsertQuery = $"insert into user(id, name, pw) values('{jsonData.ID}', '{jsonData.NAME}', '{jsonData.PWD}')";
+                    Console.Write("데이터 insert 시작!");
+
+                    // command connection
+                    MySqlCommand cmd = new MySqlCommand(InsertQuery, conn);
+
+                    // 만약에 내가처리한 Mysql에 정상적으로 들어갔다면 메세지를 보여주라는 뜻
+                    if (cmd.ExecuteNonQuery() == 1)
+                    {
+                        Console.Write("Insert 완료!");
+                    }
+                    else
+                    {
+                        Console.Write("Insert 실패!");
+                    }
+                }catch(Exception e)
+                {
+                    Console.Write(e.ToString());
+                }
+            }
+        }
         // Login packet
-        public static void LoginHandler()
+        public static void LoginHandler(dynamic jsonData)
         {
             Console.WriteLine("Login Handler!");
+            Console.WriteLine(jsonData);
         }
 
         // Register packet
-        public static void RegisterHandler()
+        public static void RegisterHandler(dynamic jsonData)
         {
             Console.WriteLine("Register Handler!");
+            Console.WriteLine(jsonData);
+            SQLConnect(jsonData);
         }
 
 

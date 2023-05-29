@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -10,12 +11,12 @@ namespace Client1
     internal class Program
     {
         //json structure
-        public class DataObject
+        public class RegisterObject
         {
-            public string Route { get; set; }
-            public string Text1 { get; set; }
-            public string Text2 { get; set; }
-            public string Text3 { get; set; }
+            public string ROUTE { get; set; }
+            public string ID { get; set; }
+            public string NAME { get; set; }
+            public string PWD { get; set; }
         }
         static void Main()
         {
@@ -27,12 +28,12 @@ namespace Client1
             Console.WriteLine("Client Console.");
             try
             {
-                DataObject data = new DataObject
+                RegisterObject data = new RegisterObject
                 {
-                    Route = "Login",
-                    Text1 = "Hello,",
-                    Text2 = "My Name is ",
-                    Text3 = "Pyeon!"
+                    ROUTE = "Register",
+                    ID = "pshsh9234",
+                    NAME = "Pyeonseohee",
+                    PWD = "123456789"
                 };
                 string jsonString = JsonSerializer.Serialize(data); // object -> json
                 Console.WriteLine(jsonString);
