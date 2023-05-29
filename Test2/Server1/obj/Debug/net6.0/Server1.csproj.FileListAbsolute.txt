@@ -28,3 +28,5 @@ C:\Users\82103\OneDrive\바탕 화면\CSsocketProgramming\Test2\Server1\obj\Debu
 C:\Users\82103\OneDrive\바탕 화면\CSsocketProgramming\Test2\Server1\obj\Debug\net6.0\Server1.pdb
 C:\Users\82103\OneDrive\바탕 화면\CSsocketProgramming\Test2\Server1\obj\Debug\net6.0\Server1.genruntimeconfig.cache
 C:\Users\82103\OneDrive\바탕 화면\CSsocketProgramming\Test2\Server1\obj\Debug\net6.0\ref\Server1.dll
+C:\Users\82103\OneDrive\바탕 화면\CSsocketProgramming\Test2\Server1\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\82103\OneDrive\바탕 화면\CSsocketProgramming\Test2\Server1\obj\Debug\net6.0\Server1.csproj.CopyComplete
