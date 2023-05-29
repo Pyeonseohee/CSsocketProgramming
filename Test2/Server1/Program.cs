@@ -55,7 +55,7 @@ namespace Server1
                     {
                         // 수신한 데이터 처리
                         string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-
+                        Console.WriteLine(data);
                         dynamic jsonObject = JsonConvert.DeserializeObject<dynamic>(data);
                         if (jsonObject.ROUTE == "Login") // Login이면
                         {

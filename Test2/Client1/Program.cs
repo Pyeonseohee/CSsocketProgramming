@@ -31,9 +31,9 @@ namespace Client1
                 RegisterObject data = new RegisterObject
                 {
                     ROUTE = "Register",
-                    ID = "test1",
-                    NAME = "test1",
-                    PWD = "test1"
+                    ID = "seojin",
+                    NAME = "seojin",
+                    PWD = "seojin1234"
                 };
                 string jsonString = JsonSerializer.Serialize(data); // object -> json
                 Console.WriteLine(jsonString);
