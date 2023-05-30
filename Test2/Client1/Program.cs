@@ -18,11 +18,18 @@ namespace Client1
             public string NAME { get; set; }
             public string PWD { get; set; }
         }
+
+        public class LoginObject
+        {
+            public string ROUTE { get; set; }
+            public string ID { get; set; }
+            public string PWD { get; set; }
+        }
         static void Main()
         {
             // EC2 인스턴스의 IP 주소와 포트 번호
-            string ipAddress = "52.206.228.119";
-            //string ipAddress = "127.0.0.1";
+            // string ipAddress = "52.206.228.119";
+            string ipAddress = "127.0.0.1";
             int port = 50000;
             TcpClient client = null;
             Console.WriteLine("Client Console.");
@@ -35,6 +42,13 @@ namespace Client1
                     NAME = "seojin",
                     PWD = "seojin1234"
                 };
+
+                //LoginObject data = new LoginObject
+                //{
+                //    ROUTE = "Login",
+                //    ID = "seojin",
+                //    PWD = "seojin1234"
+                //};
                 string jsonString = JsonSerializer.Serialize(data); // object -> json
                 Console.WriteLine(jsonString);
 

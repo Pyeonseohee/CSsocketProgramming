@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using MySql.Data.MySqlClient;
 using System.Collections.Specialized;
 using System.Text.Json.Nodes;
+using Server1;
 
 namespace Server1
 {
@@ -17,6 +18,9 @@ namespace Server1
             // 서버의 IP 주소와 포트 번호
             string ipAddress = "127.0.0.1";
             int port = 50000;
+            // 이미지 저장 경로
+            string imagePath = "image.jpg";
+
 
             try
             {
@@ -48,13 +52,27 @@ namespace Server1
 
                     // 클라이언트와의 데이터 통신 처리
                     NetworkStream stream = client.GetStream();
-                    byte[] buffer = new byte[1024];
+                    byte[] buffer = new byte[4096];
                     int bytesRead;
 
                     while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        // 수신한 데이터 처리
-                        string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            int byteRead;
+                            while ((byteRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                memoryStream.Write(buffer, 0, byteRead);
+                            }
+
+                            // 이미지 저장
+                            File.WriteAllBytes(imagePath, memoryStream.ToArray());
+                        }
+                        Console.WriteLine("이미지 저장 완료");
+
+
+                    // 수신한 데이터 처리
+                    string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                         Console.WriteLine(data);
                         dynamic jsonObject = JsonConvert.DeserializeObject<dynamic>(data);
                         if (jsonObject.ROUTE == "Login") // Login이면
@@ -88,42 +106,12 @@ namespace Server1
             Console.ReadLine();
         }
 
-        public static void SQLConnect(dynamic jsonData)
-        {
-            // RDS 서버에 접속
-            string StringToConnection = "Server=nowmsm-db.cirkkpu5fv9s.us-east-1.rds.amazonaws.com;Database=nowMSM;Uid=admin;Pwd=00000000;";
-            using (MySqlConnection conn = new MySqlConnection(StringToConnection))
-            {
-                Console.Write("success connection!");
-                try
-                {
-                    conn.Open();
-                    string InsertQuery = $"insert into user(id, name, pw) values('{jsonData.ID}', '{jsonData.NAME}', '{jsonData.PWD}')";
-                    Console.Write("SQL insert start!");
-
-                    // command connection
-                    MySqlCommand cmd = new MySqlCommand(InsertQuery, conn);
-
-                    // 만약에 내가처리한 Mysql에 정상적으로 들어갔다면 메세지를 보여주라는 뜻
-                    if (cmd.ExecuteNonQuery() == 1)
-                    {
-                        Console.Write("Insert success!");
-                    }
-                    else
-                    {
-                        Console.Write("Insert error!");
-                    }
-                }catch(Exception e)
-                {
-                    Console.Write(e.ToString());
-                }
-            }
-        }
         // Login packet
         public static void LoginHandler(dynamic jsonData)
         {
             Console.WriteLine("Login Handler!");
             Console.WriteLine(jsonData);
+            SQLClass.LoginPostSQL(jsonData);
         }
 
         // Register packet
@@ -131,7 +119,7 @@ namespace Server1
         {
             Console.WriteLine("Register Handler!");
             Console.WriteLine(jsonData);
-            SQLConnect(jsonData);
+            SQLClass.RegisterPostSQL(jsonData);
         }
 
 
