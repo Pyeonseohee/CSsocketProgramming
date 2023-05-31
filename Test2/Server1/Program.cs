@@ -67,9 +67,9 @@ namespace Server1
                             Console.WriteLine(byteRead);
                                 cnt++;
                                 memoryStream.Write(buffer, 0, byteRead);
-                            
-                            }
-                        Console.WriteLine(memoryStream.ToArray());
+                            Console.WriteLine(memoryStream.ToArray());
+                        }
+                        
                             // 이미지 저장
                             File.WriteAllBytes("image"+cnt.ToString()+".png", memoryStream.ToArray());
                         }
