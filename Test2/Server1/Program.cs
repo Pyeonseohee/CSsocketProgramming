@@ -64,15 +64,17 @@ namespace Server1
                         {
                             Console.WriteLine("memory streaming");
                             int byteRead;
+                            int cnt = 0;
                             while ((byteRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                             {
+                                cnt++;
                                 memoryStream.Write(buffer, 0, byteRead);
                             }
 
                             // 이미지 저장
-                            File.WriteAllBytes(imagePath, memoryStream.ToArray());
+                            File.WriteAllBytes(imagePath+cnt.ToString(), memoryStream.ToArray());
                         }
-                        Console.WriteLine("이미지 저장 완료");
+                        Console.WriteLine("image store success!");
 
 
                     // 수신한 데이터 처리
