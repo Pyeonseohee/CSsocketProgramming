@@ -63,6 +63,8 @@ namespace Server1
                             int cnt = 0;
                             while ((byteRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                             {
+                            Console.WriteLine(buffer.Length);
+                            Console.WriteLine(byteRead);
                                 cnt++;
                                 memoryStream.Write(buffer, 0, byteRead);
                             }
