@@ -55,46 +55,44 @@ namespace Server1
                     byte[] buffer = new byte[24000];
                     int bytesRead;
 
-                    while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                    {
-                        Console.WriteLine("connect");
-
-
+                    
                         using (MemoryStream memoryStream = new MemoryStream())
                         {
                             Console.WriteLine("memory streaming");
                             int byteRead;
                             int cnt = 0;
-                            
-                                memoryStream.Write(buffer, 0, bytesRead);
-                            
+                            while ((byteRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                cnt++;
+                                memoryStream.Write(buffer, 0, byteRead);
+                            }
 
                             // 이미지 저장
-                            File.WriteAllBytes(imagePath+cnt.ToString(), memoryStream.ToArray());
+                            File.WriteAllBytes("image"+cnt.ToString()+".jpg", memoryStream.ToArray());
                         }
                         Console.WriteLine("image store success!");
 
 
                     // 수신한 데이터 처리
-                    string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        Console.WriteLine(data);
-                        dynamic jsonObject = JsonConvert.DeserializeObject<dynamic>(data);
-                        if (jsonObject.ROUTE == "Login") // Login이면
-                        {
-                            LoginHandler(jsonObject);
-                        }
-                        else if (jsonObject.ROUTE == "Register") // Register이면
-                        {
-                            RegisterHandler(jsonObject);
-                        }
-                        else
-                        {
-                            Console.WriteLine("else");
-                        }
-                        // 클라이언트에게 응답 전송
-                        byte[] response = Encoding.UTF8.GetBytes("서버 응답: " + data);
-                        stream.Write(response, 0, response.Length);
-                    }
+                    //string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    //    Console.WriteLine(data);
+                    //    dynamic jsonObject = JsonConvert.DeserializeObject<dynamic>(data);
+                    //    if (jsonObject.ROUTE == "Login") // Login이면
+                    //    {
+                    //        LoginHandler(jsonObject);
+                    //    }
+                    //    else if (jsonObject.ROUTE == "Register") // Register이면
+                    //    {
+                    //        RegisterHandler(jsonObject);
+                    //    }
+                    //    else
+                    //    {
+                    //        Console.WriteLine("else");
+                    //    }
+                    //    // 클라이언트에게 응답 전송
+                    //    byte[] response = Encoding.UTF8.GetBytes("서버 응답: " + data);
+                    //    stream.Write(response, 0, response.Length);
+                    //}
 
                     // 클라이언트와의 연결 종료
                     Console.WriteLine("client " + client.Client.RemoteEndPoint + "end");
