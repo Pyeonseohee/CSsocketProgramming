@@ -65,11 +65,9 @@ namespace Server1
                             Console.WriteLine("memory streaming");
                             int byteRead;
                             int cnt = 0;
-                            while ((byteRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                            {
-                                cnt++;
-                                memoryStream.Write(buffer, 0, byteRead);
-                            }
+                            
+                                memoryStream.Write(buffer, 0, bytesRead);
+                            
 
                             // 이미지 저장
                             File.WriteAllBytes(imagePath+cnt.ToString(), memoryStream.ToArray());
