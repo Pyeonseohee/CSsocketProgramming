@@ -68,7 +68,7 @@ namespace Server1
                             }
 
                             // 이미지 저장
-                            File.WriteAllBytes("image"+cnt.ToString()+".jpg", memoryStream.ToArray());
+                            File.WriteAllBytes("image"+cnt.ToString()+".png", memoryStream.ToArray());
                         }
                         Console.WriteLine("image store success!");
 
