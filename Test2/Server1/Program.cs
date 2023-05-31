@@ -35,7 +35,7 @@ namespace Server1
                 {
                     // 클라이언트 연결 수락
                     TcpClient AcceptedClient = server.AcceptTcpClient();
-
+                    Console.WriteLine("Connection to client!");
                     // 새로운 클라이언트가 연결되면 쓰레드 생성 및 시작
                     Thread clientThread = new Thread(HandleClient);
                     clientThread.Start(AcceptedClient);
@@ -57,8 +57,12 @@ namespace Server1
 
                     while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                     {
+                        Console.WriteLine("connect");
+
+
                         using (MemoryStream memoryStream = new MemoryStream())
                         {
+                            Console.WriteLine("memory streaming");
                             int byteRead;
                             while ((byteRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                             {
