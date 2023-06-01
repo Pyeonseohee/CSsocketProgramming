@@ -43,10 +43,6 @@ namespace Server1
                     clientThread.Start(AcceptedClient);
                 }
 
-                // 클라이언트 연결 수락
-                TcpClient client = server.AcceptTcpClient();
-                Console.WriteLine("Connection to client!");
-
 
                 void HandleClient(object clientObj)
                 {
@@ -54,51 +50,69 @@ namespace Server1
                     
                     // 클라이언트와의 데이터 통신 처리
                     NetworkStream stream = client.GetStream();
-                    // 헤더를 읽음
-                    string header = ReadHeader(stream);
-                    int imageLength = ExtractImageLength(header); // 이미지 데이터 길이 추출
-                    Console.WriteLine(imageLength);
-                    byte[] imageBuffer = new byte[imageLength]; // 이미지 데이터를 저장할 버퍼
-                    int totalBytesReceived = 0; // 수신된 전체 바이트 수
-                    
 
-                    // 이미지 데이터를 읽음
-                    while (totalBytesReceived < imageLength)
+                    const int bufferSize = 1024;
+                    byte[] buffer = new byte[bufferSize];
+                    int bytesRead;
+
+                    // 파일 저장 경로 및 파일명 설정
+                    string filePath = "video.mp4";
+
+                    // 파일 스트림 생성
+                    using (FileStream fileStream = File.OpenWrite(filePath))
                     {
-                        int bytesRead = stream.Read(imageBuffer, totalBytesReceived, imageLength - totalBytesReceived);
-                        Console.WriteLine(bytesRead);
-                        totalBytesReceived += bytesRead;
-                    }
-
-                    // 이미지를 파일로 저장 (예시: image.jpg)
-                    File.WriteAllBytes("image.jpg", imageBuffer);
-
-                    // 헤더를 읽는 메서드
-                    string ReadHeader(NetworkStream stream)
-                    {
-                        byte[] headerBuffer = new byte[1024]; // 헤더를 저장할 버퍼
-                        int bytesRead = stream.Read(headerBuffer, 0, headerBuffer.Length);
-                        Console.WriteLine("bytesRead: " + bytesRead);
-                        string header = Encoding.ASCII.GetString(headerBuffer, 0, bytesRead);
-                        Console.WriteLine("header: "+ header);
-                        return header;
-                    }
-
-                    // 이미지 데이터 길이 추출 메서드
-                    int ExtractImageLength(string header)
-                    {
-                        string pattern = @"totalLen:\s*'(\d+)'";
-                        Match match = Regex.Match(header, pattern);
-                        if (match.Success)
+                        // 클라이언트로부터 데이터 수신 및 파일에 저장
+                        while ((bytesRead = stream.Read(buffer, 0, bufferSize)) > 0)
                         {
-                            Console.WriteLine("match!!!!!!!!!!!!");
-                            string valueStr = match.Groups[1].Value;
-                            int value = int.Parse(valueStr);
-                            Console.WriteLine("value: " + value);
-                            return value;
+                            fileStream.Write(buffer, 0, bytesRead);
                         }
-                        throw new InvalidOperationException("No image Length!!!!!!!!!!!!!!!!");
                     }
+
+                    // 헤더를 읽음
+                    //string header = ReadHeader(stream);
+                    //int imageLength = ExtractImageLength(header); // 이미지 데이터 길이 추출
+                    //Console.WriteLine(imageLength);
+                    //byte[] imageBuffer = new byte[imageLength]; // 이미지 데이터를 저장할 버퍼
+                    //int totalBytesReceived = 0; // 수신된 전체 바이트 수
+
+
+                    //// 이미지 데이터를 읽음
+                    //while (totalBytesReceived < imageLength)
+                    //{
+                    //    int bytesRead = stream.Read(imageBuffer, totalBytesReceived, imageLength - totalBytesReceived);
+                    //    Console.WriteLine(bytesRead);
+                    //    totalBytesReceived += bytesRead;
+                    //}
+
+                    //// 이미지를 파일로 저장 (예시: image.jpg)
+                    //File.WriteAllBytes("image.jpg", imageBuffer);
+
+                    //// 헤더를 읽는 메서드
+                    //string ReadHeader(NetworkStream stream)
+                    //{
+                    //    byte[] headerBuffer = new byte[1024]; // 헤더를 저장할 버퍼
+                    //    int bytesRead = stream.Read(headerBuffer, 0, headerBuffer.Length);
+                    //    Console.WriteLine("bytesRead: " + bytesRead);
+                    //    string header = Encoding.ASCII.GetString(headerBuffer, 0, bytesRead);
+                    //    Console.WriteLine("header: "+ header);
+                    //    return header;
+                    //}
+
+                    //// 이미지 데이터 길이 추출 메서드
+                    //int ExtractImageLength(string header)
+                    //{
+                    //    string pattern = @"totalLen:\s*'(\d+)'";
+                    //    Match match = Regex.Match(header, pattern);
+                    //    if (match.Success)
+                    //    {
+                    //        Console.WriteLine("match!!!!!!!!!!!!");
+                    //        string valueStr = match.Groups[1].Value;
+                    //        int value = int.Parse(valueStr);
+                    //        Console.WriteLine("value: " + value);
+                    //        return value;
+                    //    }
+                    //    throw new InvalidOperationException("No image Length!!!!!!!!!!!!!!!!");
+                    //}
 
                     //using (MemoryStream memoryStream = new MemoryStream())
                     //{
