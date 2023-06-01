@@ -70,7 +70,7 @@ namespace Server1
                             Console.WriteLine("check frame!!!!");
                             Console.WriteLine("frame: " + frame);
                             // 프레임 헤더와 푸터를 사용하여 유효한 프레임인지 확인
-                            if (frame.StartsWith("START") && frame.EndsWith("END"))
+                            if (frame.StartsWith("start") && frame.EndsWith("end"))
                             {
                                 // 프레임 헤더와 푸터를 제거한 실제 데이터 추출
                                 string frameData = frame.Substring(5, frame.Length - 8);
