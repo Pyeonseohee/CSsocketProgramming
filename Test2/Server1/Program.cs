@@ -55,12 +55,36 @@ namespace Server1
                     NetworkStream stream = client.GetStream();
                     byte[] buffer = new byte[1024];
                     int bytesRead = 0;
-
-                    using (FileStream fileStream = new FileStream(saveFilePath, FileMode.Create))
-                    {
                         while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                         {
-                            fileStream.Write(buffer, 0, bytesRead);
+                        Console.WriteLine("reading bytes");
+                        Console.WriteLine("byteRead: "+ bytesRead);
+                        string receivedString = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+                        Console.WriteLine("receiveString: " + receivedString);
+                        // 프레임 구분자를 기준으로 데이터 분할
+                        string[] frames = receivedString.Split(new string[] { "||" }, StringSplitOptions.None);
+
+                        foreach (string frame in frames)
+                        {
+                            Console.WriteLine("check frame!!!!");
+                            Console.WriteLine("frame: " + frame);
+                            // 프레임 헤더와 푸터를 사용하여 유효한 프레임인지 확인
+                            if (frame.StartsWith("START") && frame.EndsWith("END"))
+                            {
+                                // 프레임 헤더와 푸터를 제거한 실제 데이터 추출
+                                string frameData = frame.Substring(5, frame.Length - 8);
+                                Console.WriteLine("frameData: " + frameData);
+                                // 데이터 저장 등 필요한 처리 수행
+                                // 여기서는 예시로 파일에 저장하는 코드를 제공합니다.
+                                Console.WriteLine("making file stream");
+                                using (FileStream fileStream = new FileStream("frame.jpg", FileMode.Append))
+                                {
+                                    byte[] frameBytes = Encoding.UTF8.GetBytes(frameData);
+                                    fileStream.Write(frameBytes, 0, frameBytes.Length);
+                                }
+                                Console.WriteLine("file success!!!!!!!!!!!!!!!!!!!!!!");
+                            }
                         }
                     }
 
