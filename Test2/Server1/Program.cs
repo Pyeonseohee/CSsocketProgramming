@@ -56,7 +56,7 @@ namespace Server1
                     int bytesRead;
 
                     // 파일 저장 경로 및 파일명 설정
-                    string filePath = "video.mp4";
+                    string filePath = "test.jpg";
 
                     // 파일 스트림 생성
                     using (FileStream fileStream = File.OpenWrite(filePath))
