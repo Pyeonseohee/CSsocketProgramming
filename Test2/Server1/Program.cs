@@ -53,7 +53,7 @@ namespace Server1
                     
                     // 클라이언트와의 데이터 통신 처리
                     NetworkStream stream = client.GetStream();
-                    byte[] buffer = new byte[30000];
+                    byte[] buffer = new byte[1024];
                     int bytesRead = 0;
                         while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                         {
