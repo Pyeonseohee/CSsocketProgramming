@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "x3CnVrM2Fbv2TXpUUYenSFtGT76Xn7OCHi2qHES2QGtfXlT5tPY0M6pNfKxGQiBDaDP36gABmwzsMpPgTY0ZAw==",
+  "dgSpecHash": "9evHjDsJD+RQFLdNxYImJRiZfTv9+s2BgxZnq6fIPumTAaE1oszsUtF87IC4WKydKctA8y8jyejbnsqduvAYBA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\note\\Documents\\GitHub\\CSsocketProgramming\\Test2\\Client1\\Client1.csproj",
+  "projectFilePath": "C:\\Users\\82103\\OneDrive\\바탕 화면\\CSsocketProgramming\\Test2\\Client1\\Client1.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\note\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+    "C:\\Users\\82103\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
   ],
   "logs": []
 }

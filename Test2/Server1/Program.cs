@@ -8,6 +8,7 @@ using MySql.Data.MySqlClient;
 using System.Collections.Specialized;
 using System.Text.Json.Nodes;
 using Server1;
+using System.IO;
 
 namespace Server1
 {
@@ -20,7 +21,7 @@ namespace Server1
             int port = 50000;
             // 이미지 저장 경로
             string imagePath = "image.jpg";
-
+            string saveFilePath = "log/image.jpg";
 
             try
             {
@@ -49,36 +50,45 @@ namespace Server1
                 void HandleClient(object clientObj)
                 {
                     TcpClient client = (TcpClient)clientObj;
-
+                    
                     // 클라이언트와의 데이터 통신 처리
                     NetworkStream stream = client.GetStream();
-                    byte[] buffer = new byte[24000];
-                    int bytesRead;
+                    byte[] buffer = new byte[1024];
+                    int bytesRead = 0;
 
-                    
-                        using (MemoryStream memoryStream = new MemoryStream())
+                    using (FileStream fileStream = new FileStream(saveFilePath, FileMode.Create))
+                    {
+                        while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                         {
-                            Console.WriteLine("memory streaming");
-                            int byteRead;
-                            int cnt = 0;
-                        if ((byteRead = stream.Read(buffer, 0, buffer.Length) )> 0)
-                        {
-
-                            Console.WriteLine(buffer.Length);
-                            Console.WriteLine(byteRead);
-                            cnt++;
-                            memoryStream.Write(buffer, 0, byteRead);
-                            Console.WriteLine(memoryStream.ToArray());
+                            fileStream.Write(buffer, 0, bytesRead);
                         }
-                        
-                            // 이미지 저장
-                            File.WriteAllBytes("image"+cnt.ToString()+".png", memoryStream.ToArray());
-                        }
-                        Console.WriteLine("image store success!");
+                    }
 
+                    //using (MemoryStream memoryStream = new MemoryStream())
+                    //{
+                    //    Console.WriteLine("memory streaming");
+                    //    int byteRead;
+                    //    int cnt = 0;
+                    //if ((byteRead = stream.Read(buffer, 0, buffer.Length) )> 0)
+                    //{
 
-                    // 수신한 데이터 처리
-                    //string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    //    Console.WriteLine(buffer.Length);
+                    //    Console.WriteLine(byteRead);
+                    //    cnt++;
+                    //    memoryStream.Write(buffer, 0, byteRead);
+                    //    Console.WriteLine(memoryStream.ToArray());
+                    //}
+
+                    //    // 이미지 저장
+                    //    File.WriteAllBytes("image"+cnt.ToString()+".png", memoryStream.ToArray());
+                    //}
+                    //Console.WriteLine("image store success!");
+
+                    //while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                    //{
+
+                    //    // 수신한 데이터 처리
+                    //    string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                     //    Console.WriteLine(data);
                     //    dynamic jsonObject = JsonConvert.DeserializeObject<dynamic>(data);
                     //    if (jsonObject.ROUTE == "Login") // Login이면
@@ -93,6 +103,7 @@ namespace Server1
                     //    {
                     //        Console.WriteLine("else");
                     //    }
+                    //}
                     //    // 클라이언트에게 응답 전송
                     //    byte[] response = Encoding.UTF8.GetBytes("서버 응답: " + data);
                     //    stream.Write(response, 0, response.Length);
@@ -108,7 +119,6 @@ namespace Server1
             {
                 Console.WriteLine("오류: " + e.Message);
             }
-
             Console.ReadLine();
         }
 
