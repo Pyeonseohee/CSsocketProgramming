@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 using System.Text.Json.Nodes;
 using Server1;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Server1
 {
@@ -53,39 +54,50 @@ namespace Server1
                     
                     // 클라이언트와의 데이터 통신 처리
                     NetworkStream stream = client.GetStream();
-                    byte[] buffer = new byte[1036];
-                    int bytesRead = 0;
-                        while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                        {
-                        Console.WriteLine("reading bytes");
-                        Console.WriteLine("byteRead: "+ bytesRead);
-                        string receivedString = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    // 헤더를 읽음
+                    string header = ReadHeader(stream);
+                    int imageLength = ExtractImageLength(header); // 이미지 데이터 길이 추출
+                    Console.WriteLine(imageLength);
+                    byte[] imageBuffer = new byte[imageLength]; // 이미지 데이터를 저장할 버퍼
+                    int totalBytesReceived = 0; // 수신된 전체 바이트 수
+                    
 
-                        Console.WriteLine("receiveString: " + receivedString);
-                        // 프레임 구분자를 기준으로 데이터 분할
-                        string[] frames = receivedString.Split(new string[] { "||" }, StringSplitOptions.None);
+                    // 이미지 데이터를 읽음
+                    while (totalBytesReceived < imageLength)
+                    {
+                        int bytesRead = stream.Read(imageBuffer, totalBytesReceived, imageLength - totalBytesReceived);
+                        Console.WriteLine(bytesRead);
+                        totalBytesReceived += bytesRead;
+                    }
 
-                        foreach (string frame in frames)
+                    // 이미지를 파일로 저장 (예시: image.jpg)
+                    File.WriteAllBytes("image.jpg", imageBuffer);
+
+                    // 헤더를 읽는 메서드
+                    string ReadHeader(NetworkStream stream)
+                    {
+                        byte[] headerBuffer = new byte[1024]; // 헤더를 저장할 버퍼
+                        int bytesRead = stream.Read(headerBuffer, 0, headerBuffer.Length);
+                        Console.WriteLine("bytesRead: " + bytesRead);
+                        string header = Encoding.ASCII.GetString(headerBuffer, 0, bytesRead);
+                        Console.WriteLine("header: "+ header);
+                        return header;
+                    }
+
+                    // 이미지 데이터 길이 추출 메서드
+                    int ExtractImageLength(string header)
+                    {
+                        string pattern = @"totalLen:\s*'(\d+)'";
+                        Match match = Regex.Match(header, pattern);
+                        if (match.Success)
                         {
-                            Console.WriteLine("check frame!!!!");
-                            Console.WriteLine("frame: " + frame);
-                            // 프레임 헤더와 푸터를 사용하여 유효한 프레임인지 확인
-                            if (frame.StartsWith("start") && frame.EndsWith("end"))
-                            {
-                                // 프레임 헤더와 푸터를 제거한 실제 데이터 추출
-                                string frameData = frame.Substring(5, frame.Length - 8);
-                                Console.WriteLine("frameData: " + frameData);
-                                // 데이터 저장 등 필요한 처리 수행
-                                // 여기서는 예시로 파일에 저장하는 코드를 제공합니다.
-                                Console.WriteLine("making file stream");
-                                using (FileStream fileStream = new FileStream("frame.jpg", FileMode.Append))
-                                {
-                                    byte[] frameBytes = Encoding.UTF8.GetBytes(frameData);
-                                    fileStream.Write(frameBytes, 0, frameBytes.Length);
-                                }
-                                Console.WriteLine("file success!!!!!!!!!!!!!!!!!!!!!!");
-                            }
+                            Console.WriteLine("match!!!!!!!!!!!!");
+                            string valueStr = match.Groups[1].Value;
+                            int value = int.Parse(valueStr);
+                            Console.WriteLine("value: " + value);
+                            return value;
                         }
+                        throw new InvalidOperationException("No image Length!!!!!!!!!!!!!!!!");
                     }
 
                     //using (MemoryStream memoryStream = new MemoryStream())
@@ -107,7 +119,12 @@ namespace Server1
                     //    File.WriteAllBytes("image"+cnt.ToString()+".png", memoryStream.ToArray());
                     //}
                     //Console.WriteLine("image store success!");
+                    //TcpClient client = (TcpClient)clientObj;
 
+                    //// 클라이언트와의 데이터 통신 처리
+                    //NetworkStream stream = client.GetStream();
+                    //byte[] buffer = new byte[1036];
+                    //int bytesRead = 0;
                     //while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                     //{
 
