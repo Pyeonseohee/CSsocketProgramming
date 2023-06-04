@@ -44,7 +44,7 @@ namespace Client1
                 };
 
                 //LoginObject data = new LoginObject
-                //{
+                //{ 
                 //    ROUTE = "Login",
                 //    ID = "seojin",
                 //    PWD = "seojin1234"

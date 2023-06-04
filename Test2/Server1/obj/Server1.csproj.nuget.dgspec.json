@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\82103\\OneDrive\\바탕 화면\\CSsocketProgramming\\Test2\\Server1\\Server1.csproj": {}
+    "C:\\Users\\Owner\\Desktop\\Github\\CSsocketProgramming\\Test2\\Server1\\Server1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\82103\\OneDrive\\바탕 화면\\CSsocketProgramming\\Test2\\Server1\\Server1.csproj": {
+    "C:\\Users\\Owner\\Desktop\\Github\\CSsocketProgramming\\Test2\\Server1\\Server1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\82103\\OneDrive\\바탕 화면\\CSsocketProgramming\\Test2\\Server1\\Server1.csproj",
+        "projectUniqueName": "C:\\Users\\Owner\\Desktop\\Github\\CSsocketProgramming\\Test2\\Server1\\Server1.csproj",
         "projectName": "Server1",
-        "projectPath": "C:\\Users\\82103\\OneDrive\\바탕 화면\\CSsocketProgramming\\Test2\\Server1\\Server1.csproj",
-        "packagesPath": "C:\\Users\\82103\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\82103\\OneDrive\\바탕 화면\\CSsocketProgramming\\Test2\\Server1\\obj\\",
+        "projectPath": "C:\\Users\\Owner\\Desktop\\Github\\CSsocketProgramming\\Test2\\Server1\\Server1.csproj",
+        "packagesPath": "C:\\Users\\Owner\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Owner\\Desktop\\Github\\CSsocketProgramming\\Test2\\Server1\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\82103\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Owner\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -65,7 +70,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

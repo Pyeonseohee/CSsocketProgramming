@@ -10,7 +10,7 @@ namespace Server1
     internal class SQLClass
     {
         // Register했을 때의 route(ID, NAME, PWD)
-        public static void RegisterPostSQL(dynamic jsonData)
+        public static string RegisterPostSQL(dynamic jsonData)
         {
             // RDS 서버에 접속
             string StringToConnection = "Server=nowmsm-db.cirkkpu5fv9s.us-east-1.rds.amazonaws.com;Database=nowMSM;Uid=admin;Pwd=00000000;";
@@ -30,24 +30,27 @@ namespace Server1
                     if (cmd.ExecuteNonQuery() == 1)
                     {
                         Console.Write("Insert success!");
+                        return "success";
                         // 회원가입 완료됐다~
                     }
                     else
                     {
                         Console.Write("Insert error!");
-                        // 오류났다~
+                        return "error";
+                        // DB 오류났다~
                     }
                     conn.Close();
                 }
                 catch (Exception e)
                 {
                     Console.Write(e.ToString());
+                    return "";
                 }
             }
         }
 
         // Login했을 때의 route(ID, PWD)
-        public static void LoginPostSQL(dynamic jsonData)
+        public static string LoginPostSQL(dynamic jsonData)
         {
             // RDS 서버에 접속
             string StringToConnection = "Server=nowmsm-db.cirkkpu5fv9s.us-east-1.rds.amazonaws.com;Database=nowMSM;Uid=admin;Pwd=00000000;";
@@ -69,16 +72,19 @@ namespace Server1
                         if(jsonData.PWD == DBpwd) // 비밀번호가 DB와 일치하면
                         {
                             Console.WriteLine("correct password!");
+                            return DBresult["user_id"].ToString() ;
                         }
                         else
-                        {
+                        { // 비밀번호 불일치
                             Console.WriteLine("Incorrect password!");
+                            return "incorrect";
                         }
 
                     }
                     else
                     {
                         Console.WriteLine("Unexist!");
+                        return "unexist";
                         // 회원가입부터 해라~
                     }
                     conn.Close();
@@ -87,6 +93,7 @@ namespace Server1
                 catch (Exception e)
                 {
                     Console.Write(e.ToString());
+                    return "";
                 }
             }
         }

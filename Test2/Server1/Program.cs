@@ -55,18 +55,18 @@ namespace Server1
                     byte[] buffer = new byte[bufferSize];
                     int bytesRead;
 
-                    // 파일 저장 경로 및 파일명 설정
-                    string filePath = "test.jpg";
+                    //// 파일 저장 경로 및 파일명 설정
+                    //string filePath = "test.jpg";
 
-                    // 파일 스트림 생성
-                    using (FileStream fileStream = File.OpenWrite(filePath))
-                    {
-                        // 클라이언트로부터 데이터 수신 및 파일에 저장
-                        while ((bytesRead = stream.Read(buffer, 0, bufferSize)) > 0)
-                        {
-                            fileStream.Write(buffer, 0, bytesRead);
-                        }
-                    }
+                    //// 파일 스트림 생성
+                    //using (FileStream fileStream = File.OpenWrite(filePath))
+                    //{
+                    //    // 클라이언트로부터 데이터 수신 및 파일에 저장
+                    //    while ((bytesRead = stream.Read(buffer, 0, bufferSize)) > 0)
+                    //    {
+                    //        fileStream.Write(buffer, 0, bytesRead);
+                    //    }
+                    //}
 
                     // 헤더를 읽음
                     //string header = ReadHeader(stream);
@@ -139,30 +139,30 @@ namespace Server1
                     //NetworkStream stream = client.GetStream();
                     //byte[] buffer = new byte[1036];
                     //int bytesRead = 0;
-                    //while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                    //{
+                    while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        // 수신한 데이터 처리
+                        string res ="";
+                        string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                        Console.WriteLine(data);
+                        dynamic jsonObject = JsonConvert.DeserializeObject<dynamic>(data);
+                        if (jsonObject.ROUTE == "Login") // Login이면
+                        {
+                            res = LoginHandler(jsonObject);
+                        }
+                        else if (jsonObject.ROUTE == "Register") // Register이면
+                        {
+                            res = RegisterHandler(jsonObject);
+                        }
+                        else
+                        {
+                            Console.WriteLine("else");
+                        }
 
-                    //    // 수신한 데이터 처리
-                    //    string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    //    Console.WriteLine(data);
-                    //    dynamic jsonObject = JsonConvert.DeserializeObject<dynamic>(data);
-                    //    if (jsonObject.ROUTE == "Login") // Login이면
-                    //    {
-                    //        LoginHandler(jsonObject);
-                    //    }
-                    //    else if (jsonObject.ROUTE == "Register") // Register이면
-                    //    {
-                    //        RegisterHandler(jsonObject);
-                    //    }
-                    //    else
-                    //    {
-                    //        Console.WriteLine("else");
-                    //    }
-                    //}
-                    //    // 클라이언트에게 응답 전송
-                    //    byte[] response = Encoding.UTF8.GetBytes("서버 응답: " + data);
-                    //    stream.Write(response, 0, response.Length);
-                    //}
+                        // 클라이언트에게 응답 전송
+                        byte[] response = Encoding.UTF8.GetBytes(res);
+                        stream.Write(response, 0, response.Length);
+                    }
 
                     // 클라이언트와의 연결 종료
                     Console.WriteLine("client " + client.Client.RemoteEndPoint + "end");
@@ -178,19 +178,20 @@ namespace Server1
         }
 
         // Login packet
-        public static void LoginHandler(dynamic jsonData)
+        public static string LoginHandler(dynamic jsonData)
         {
             Console.WriteLine("Login Handler!");
             Console.WriteLine(jsonData);
-            SQLClass.LoginPostSQL(jsonData);
+            return SQLClass.LoginPostSQL(jsonData);
         }
 
         // Register packet
-        public static void RegisterHandler(dynamic jsonData)
+        public static string RegisterHandler(dynamic jsonData)
         {
             Console.WriteLine("Register Handler!");
             Console.WriteLine(jsonData);
-            SQLClass.RegisterPostSQL(jsonData);
+            return  SQLClass.RegisterPostSQL(jsonData);
+            
         }
 
 
