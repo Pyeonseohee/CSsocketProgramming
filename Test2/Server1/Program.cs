@@ -153,6 +153,10 @@ namespace Server1
                         else if (jsonObject.ROUTE == "Register") // Register이면
                         {
                             res = RegisterHandler(jsonObject);
+                        }else if (jsonObject.ROUTE == "Calender")
+                        {
+                            Console.WriteLine("calender route!");
+                            CalenderHandler(jsonObject);
                         }
                         else
                         {
@@ -191,9 +195,13 @@ namespace Server1
             Console.WriteLine("Register Handler!");
             Console.WriteLine(jsonData);
             return  SQLClass.RegisterPostSQL(jsonData);
-            
         }
-
+        
+        // Get Emotion(by clicked Calender)
+        public static void CalenderHandler(dynamic jsonData)
+        {
+            SQLClass.CalenderGetSQL(jsonData);
+        }
 
     }
 }

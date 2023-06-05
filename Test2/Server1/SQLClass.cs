@@ -67,7 +67,6 @@ namespace Server1
                     MySqlDataReader DBresult = cmd.ExecuteReader();
                     if(DBresult.Read())
                     {
-                        Console.WriteLine($"result: {DBresult["id"]} {DBresult["name"]}, {DBresult["pw"]}");
                         string DBpwd = DBresult["pw"].ToString(); //object to string
                         if(jsonData.PWD == DBpwd) // 비밀번호가 DB와 일치하면
                         {
@@ -96,6 +95,37 @@ namespace Server1
                     return "";
                 }
             }
+        }
+
+        public static void CalenderGetSQL(dynamic jsonData)
+        {
+            // RDS 서버에 접속
+            string StringToConnection = "Server=nowmsm-db.cirkkpu5fv9s.us-east-1.rds.amazonaws.com;Database=nowMSM;Uid=admin;Pwd=00000000;";
+            using (MySqlConnection conn = new MySqlConnection(StringToConnection))
+            {
+                Console.Write("success connection!");
+                try
+                {
+                    conn.Open();
+                    Console.WriteLine(jsonData);
+                    string searchQuery = $"select emtion, date from log where user_id='{jsonData.USER_ID}'";
+
+                    // command connection
+                    MySqlCommand cmd = new MySqlCommand(searchQuery, conn);
+                    MySqlDataReader DBresult = cmd.ExecuteReader();
+                    while(DBresult.Read())
+                    {
+                        Console.WriteLine($"result: {DBresult["emtion"]} {DBresult["date"]}");
+
+                    }
+                    conn.Close();
+                }
+                catch (Exception e)
+                {
+                    Console.Write(e.ToString());
+                }
+            }
+
         }
     }
 }
