@@ -157,9 +157,26 @@ namespace Server1
                         else if (jsonObject.ROUTE == "Calender")
                         {
                             Console.WriteLine("calender route!");
-                            string[] array = CalenderHandler(jsonObject);
-                            res = JsonConvert.SerializeObject(array);
+                            res = CalenderHandler(jsonObject);
                             Console.WriteLine(res);
+                        }
+                        else if (jsonObject.ROUTE == "GetChatRoomList")
+                        {
+                            Console.WriteLine("chatRoom Get route!");
+                            res = GetChatRoomListHandler(jsonObject);
+                        }
+                        else if (jsonObject.ROUTE == "PostChatRoomList")
+                        {
+                            Console.WriteLine("chatRoom Post route!");
+                            res = PostChatRoomListHandler(jsonObject);
+                        }
+                        else if (jsonObject.ROUTE == "PostChatting")
+                        {
+                            Console.WriteLine("post chatting route!");
+                        }
+                        else if(jsonObject.ROUTE == "GetChatting")
+                        {
+                            Console.WriteLine("get chatting route!");
                         }
                         else
                         {
@@ -201,10 +218,20 @@ namespace Server1
         }
         
         // Get Emotion(by clicked Calender)
-        public static string[] CalenderHandler(dynamic jsonData)
+        public static string CalenderHandler(dynamic jsonData)
         {
             return SQLClass.CalenderGetSQL(jsonData);
         }
 
+        //Get ChatRoomList(by clicked talk button)
+        public static string GetChatRoomListHandler(dynamic jsonData)
+        {
+             return SQLClass.GetChatRoomListSQL(jsonData);
+        }
+        //Post ChatRoomList(by clicked add room button)
+        public static string PostChatRoomListHandler(dynamic jsonData)
+        {
+            return SQLClass.PostChatRoomListSQL(jsonData);
+        }
     }
 }

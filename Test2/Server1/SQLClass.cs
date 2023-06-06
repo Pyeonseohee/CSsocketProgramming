@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,16 +32,18 @@ namespace Server1
                     if (cmd.ExecuteNonQuery() == 1)
                     {
                         Console.Write("Insert success!");
+                        conn.Close();
                         return "success";
                         // 회원가입 완료됐다~
                     }
                     else
                     {
                         Console.Write("Insert error!");
+                        conn.Close();
                         return "error";
                         // DB 오류났다~
                     }
-                    conn.Close();
+                    
                 }
                 catch (Exception e)
                 {
@@ -98,7 +101,8 @@ namespace Server1
             }
         }
 
-        public static string[] CalenderGetSQL(dynamic jsonData)
+        // Emotion List Get API
+        public static string CalenderGetSQL(dynamic jsonData)
         {
             // RDS 서버에 접속
             string StringToConnection = "Server=nowmsm-db.cirkkpu5fv9s.us-east-1.rds.amazonaws.com;Database=nowMSM;Uid=admin;Pwd=00000000;";
@@ -129,13 +133,110 @@ namespace Server1
                         Console.WriteLine("추출된 날짜: "+ day);
                         Console.WriteLine($"result: {DBresult["emtion"]} {DBresult["date"]}");
                     }
-                    return dataArray;
                     conn.Close();
+                    string res = JsonConvert.SerializeObject(dataArray);
+                    return res;
+                    
                 }
                 catch (Exception e)
                 {
                     Console.Write(e.ToString());
-                    return null;
+                    return "";
+                }
+            }
+
+        }
+       
+        //Chat Room List Get API
+        public static string GetChatRoomListSQL(dynamic jsonData)
+        {
+            // RDS 서버에 접속
+            string StringToConnection = "Server=nowmsm-db.cirkkpu5fv9s.us-east-1.rds.amazonaws.com;Database=nowMSM;Uid=admin;Pwd=00000000;";
+            using (MySqlConnection conn = new MySqlConnection(StringToConnection))
+            {
+                Console.Write("success connection!");
+                try
+                {
+                    string Jsonresult = "";
+                    conn.Open();
+                    Console.WriteLine(jsonData);
+                    List<List<string>> list = new List<List<string>>();
+
+                    string searchQuery = $"select chatR_id, date, modification_date from chatRoom where user_id='{jsonData.USER_ID}'";
+
+                    // command connection
+                    MySqlCommand cmd = new MySqlCommand(searchQuery, conn);
+                    MySqlDataReader DBresult = cmd.ExecuteReader();
+                    while (DBresult.Read())
+                    {
+                        Console.WriteLine($"result: {DBresult["chatR_id"]} {DBresult["date"]} {DBresult["modification_date"]}");
+                        List<string> rowData = new List<string> { DBresult["chatR_id"].ToString(), DBresult["date"].ToString().Substring(0, 10), DBresult["modification_date"].ToString().Substring(0, 10) };
+                        list.Add(rowData);
+                    }
+                    Jsonresult= JsonConvert.SerializeObject(list) ;
+
+                    Console.WriteLine(Jsonresult);
+                    conn.Close();
+                    return Jsonresult;
+                }
+                catch (Exception e)
+                {
+                    Console.Write(e.ToString());
+                    return "";
+                }
+            }
+
+        }
+
+        // Chat Room Post API
+        public static string PostChatRoomListSQL(dynamic jsonData)
+        {
+            // RDS 서버에 접속
+            string StringToConnection = "Server=nowmsm-db.cirkkpu5fv9s.us-east-1.rds.amazonaws.com;Database=nowMSM;Uid=admin;Pwd=00000000;";
+            using (MySqlConnection conn = new MySqlConnection(StringToConnection))
+            {
+                Console.Write("success connection!");
+                try
+                {
+                    string sendChatID = "";
+                    conn.Open();
+                    Console.WriteLine(jsonData);
+                    string InsertQuery = $"insert into chatRoom(user_id, date, modification_date) values('{jsonData.USER_ID}', '{jsonData.POST_TIME}', '{jsonData.MODIFY_TIME}')";
+                    Console.Write("SQL insert start!");
+
+                    // command connection
+                    MySqlCommand cmd = new MySqlCommand(InsertQuery, conn);
+                    if (cmd.ExecuteNonQuery() == 1)
+                    {
+                        Console.Write("Insert success!");
+                        string searchQuery = $"select chatR_id from chatRoom where user_id='{jsonData.USER_ID}' and date='{jsonData.POST_TIME}' and modification_date='{jsonData.MODIFY_TIME}'";
+
+
+                        // command connection
+                        MySqlCommand cmd2 = new MySqlCommand(searchQuery, conn);
+                        MySqlDataReader DBresult = cmd2.ExecuteReader();
+                        if(DBresult.Read())
+                        {
+                            Console.WriteLine($"result {DBresult["chatR_id"]}");
+                            sendChatID = DBresult["chatR_id"].ToString();
+                        }
+
+                        conn.Close();
+                        return sendChatID;
+                        // 회원가입 완료됐다~
+                    }
+                    else
+                    {
+                        Console.Write("Insert error!");
+                        conn.Close();
+                        return "error";
+                        // DB 오류났다~
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.Write(e.ToString());
+                    return "";
                 }
             }
 
