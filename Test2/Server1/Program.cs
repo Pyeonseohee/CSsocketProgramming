@@ -2,11 +2,11 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using Newtonsoft.Json;
+using System.Threading;
 using MySql.Data.MySqlClient;
 using System.Collections.Specialized;
-using System.Text.Json.Nodes;
+
 using Server1;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -153,10 +153,13 @@ namespace Server1
                         else if (jsonObject.ROUTE == "Register") // Register이면
                         {
                             res = RegisterHandler(jsonObject);
-                        }else if (jsonObject.ROUTE == "Calender")
+                        }
+                        else if (jsonObject.ROUTE == "Calender")
                         {
                             Console.WriteLine("calender route!");
-                            CalenderHandler(jsonObject);
+                            string[] array = CalenderHandler(jsonObject);
+                            res = JsonConvert.SerializeObject(array);
+                            Console.WriteLine(res);
                         }
                         else
                         {
@@ -198,9 +201,9 @@ namespace Server1
         }
         
         // Get Emotion(by clicked Calender)
-        public static void CalenderHandler(dynamic jsonData)
+        public static string[] CalenderHandler(dynamic jsonData)
         {
-            SQLClass.CalenderGetSQL(jsonData);
+            return SQLClass.CalenderGetSQL(jsonData);
         }
 
     }

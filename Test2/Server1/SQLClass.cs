@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -97,7 +98,7 @@ namespace Server1
             }
         }
 
-        public static void CalenderGetSQL(dynamic jsonData)
+        public static string[] CalenderGetSQL(dynamic jsonData)
         {
             // RDS 서버에 접속
             string StringToConnection = "Server=nowmsm-db.cirkkpu5fv9s.us-east-1.rds.amazonaws.com;Database=nowMSM;Uid=admin;Pwd=00000000;";
@@ -108,21 +109,33 @@ namespace Server1
                 {
                     conn.Open();
                     Console.WriteLine(jsonData);
-                    string searchQuery = $"select emtion, date from log where user_id='{jsonData.USER_ID}'";
+                    int daysInMonth = DateTime.DaysInMonth(2023, Convert.ToInt32(jsonData.MONTH)); // 원하는 달에 해당하는 일 수를 가져옵니다.
+                    string[] dataArray = new string[daysInMonth]; // 해당 일 수에 맞게 배열을 생성합니다.
 
+                    string searchQuery = $"select emtion, date from log where user_id='{jsonData.USER_ID}' and month(date) = {jsonData.MONTH}";
+                    
                     // command connection
                     MySqlCommand cmd = new MySqlCommand(searchQuery, conn);
                     MySqlDataReader DBresult = cmd.ExecuteReader();
                     while(DBresult.Read())
                     {
-                        Console.WriteLine($"result: {DBresult["emtion"]} {DBresult["date"]}");
+                        string emotion = DBresult["emtion"].ToString(); // 내용 컬럼 값
+                        string date = DBresult["date"].ToString().Substring(0, 10); // 날짜 컬럼 값
+                        Console.WriteLine("date: "+ date);
+                        int day = Convert.ToDateTime(date).Day; // 날짜에서 일(day) 값을 추출합니다.
+                        Console.WriteLine("감정: "+ emotion);
 
+                        dataArray[day - 1] = emotion; // 배열에 내용을 대입합니다. 날짜에서 1을 빼는 이유는 배열 인덱스가 0부터 시작하기 때문입니다.
+                        Console.WriteLine("추출된 날짜: "+ day);
+                        Console.WriteLine($"result: {DBresult["emtion"]} {DBresult["date"]}");
                     }
+                    return dataArray;
                     conn.Close();
                 }
                 catch (Exception e)
                 {
                     Console.Write(e.ToString());
+                    return null;
                 }
             }
 
