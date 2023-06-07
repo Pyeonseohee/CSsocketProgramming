@@ -241,5 +241,45 @@ namespace Server1
             }
 
         }
+
+        //Get emotion today and chatting
+        public static string GetEmotionSQL(dynamic jsonData)
+        {
+            // RDS 서버에 접속
+            string StringToConnection = "Server=nowmsm-db.cirkkpu5fv9s.us-east-1.rds.amazonaws.com;Database=nowMSM;Uid=admin;Pwd=00000000;";
+            using (MySqlConnection conn = new MySqlConnection(StringToConnection))
+            {
+                Console.Write("success connection!");
+                try
+                {
+                    string sendChatID = "";
+                    conn.Open();
+                    Console.WriteLine(jsonData);
+                    string searchQuery = $"select emtion from log where user_id='{jsonData.USER_ID}' date={DateTime.Now.ToString("yyyy-MM-dd")}";
+
+                    // command connection
+                    MySqlCommand cmd = new MySqlCommand(searchQuery, conn);
+                    MySqlDataReader DBresult = cmd.ExecuteReader();
+                    if (DBresult.Read())
+                    {
+                        Console.WriteLine($"result {DBresult["emtion"]}");
+                        conn.Close();
+                        return DBresult["emtion"].ToString();
+                    }
+                    else
+                    {
+                        conn.Close();
+                        return "";
+                        // DB 오류났다~
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.Write(e.ToString());
+                    return "";
+                }
+            }
+
+        }
     }
 }

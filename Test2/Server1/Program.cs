@@ -19,7 +19,7 @@ namespace Server1
         {
             // 서버의 IP 주소와 포트 번호
             string ipAddress = "127.0.0.1";
-            int port = 80;
+            int port = 50000;
             // 이미지 저장 경로
             string imagePath = "image.jpg";
             string saveFilePath = "log/image.jpg";
