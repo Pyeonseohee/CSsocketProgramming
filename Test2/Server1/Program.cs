@@ -177,6 +177,8 @@ namespace Server1
                         else if(jsonObject.ROUTE == "GetChatting")
                         {
                             Console.WriteLine("get chatting route!");
+                            res = GetChattingHandler(jsonObject);
+                            Console.WriteLine(res);
                         }
                         else
                         {
@@ -232,6 +234,18 @@ namespace Server1
         public static string PostChatRoomListHandler(dynamic jsonData)
         {
             return SQLClass.PostChatRoomListSQL(jsonData);
+        }
+
+        // Get Chatting(by clicked chatRoom Button)
+        public static string GetChattingHandler(dynamic jsonData)
+        {
+            return SQLClass.GetChattingSQL(jsonData);
+        }
+
+        // Post Chatting(by clicked send Button)
+        public static string PostChattingHandler(dynamic jsonData)
+        {
+            return SQLClass.PostChattingSQL(jsonData);
         }
     }
 }
