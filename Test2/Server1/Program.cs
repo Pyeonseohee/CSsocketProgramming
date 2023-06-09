@@ -173,6 +173,8 @@ namespace Server1
                         else if (jsonObject.ROUTE == "PostChatting")
                         {
                             Console.WriteLine("post chatting route!");
+                            res = PostChattingHandler(jsonObject);
+                            Console.WriteLine(res);
                         }
                         else if(jsonObject.ROUTE == "GetChatting")
                         {

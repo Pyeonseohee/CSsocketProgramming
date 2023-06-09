@@ -170,10 +170,14 @@ namespace Server1
                     while (DBresult.Read())
                     {
                         Console.WriteLine($"result: {DBresult["chatR_id"]} {DBresult["date"]} {DBresult["modification_date"]}");
-                        List<string> rowData = new List<string> { DBresult["chatR_id"].ToString(), DBresult["date"].ToString().Substring(0, 10), DBresult["modification_date"].ToString().Substring(0, 10) };
+                        List<string> rowData = new List<string> { DBresult["chatR_id"].ToString(), DBresult["date"].ToString(), DBresult["modification_date"].ToString()};
                         list.Add(rowData);
                     }
-                    Jsonresult= JsonConvert.SerializeObject(list) ;
+
+                    // 리스트를 dateTime 값 기준으로 정렬
+                    list.Sort((x, y) => DateTime.Compare(DateTime.Parse(y[1]), DateTime.Parse(x[1])));
+
+                    Jsonresult = JsonConvert.SerializeObject(list) ;
 
                     Console.WriteLine(Jsonresult);
                     conn.Close();
@@ -198,10 +202,9 @@ namespace Server1
                 Console.Write("success connection!");
                 try
                 {
-                    string sendChatID = "";
                     conn.Open();
                     Console.WriteLine(jsonData);
-                    string InsertQuery = $"insert into chatRoom(user_id, date, modification_date) values('{jsonData.USER_ID}', '{jsonData.POST_TIME}', '{jsonData.MODIFY_TIME}')";
+                    string InsertQuery = $"insert into chatRoom(user_id, date, modification_date) values('{jsonData.USER_ID}', now(), now())";
                     Console.Write("SQL insert start!");
 
                     // command connection
@@ -209,20 +212,8 @@ namespace Server1
                     if (cmd.ExecuteNonQuery() == 1)
                     {
                         Console.Write("Insert success!");
-                        string searchQuery = $"select chatR_id from chatRoom where user_id='{jsonData.USER_ID}' and date='{jsonData.POST_TIME}' and modification_date='{jsonData.MODIFY_TIME}'";
-
-
-                        // command connection
-                        MySqlCommand cmd2 = new MySqlCommand(searchQuery, conn);
-                        MySqlDataReader DBresult = cmd2.ExecuteReader();
-                        if(DBresult.Read())
-                        {
-                            Console.WriteLine($"result {DBresult["chatR_id"]}");
-                            sendChatID = DBresult["chatR_id"].ToString();
-                        }
-
                         conn.Close();
-                        return sendChatID;
+                        return "success";
                         // 회원가입 완료됐다~
                     }
                     else
@@ -267,12 +258,12 @@ namespace Server1
                         List<string> rowData = new List<string> { DBresult["content"].ToString(), DBresult["transit_time"].ToString(), DBresult["isuser"].ToString(), DBresult["emtion"].ToString()};
                         list.Add(rowData);
                     }
+                    list.Sort((x, y) => DateTime.Compare(DateTime.Parse(x[1]), DateTime.Parse(y[1])));
                     Jsonresult = JsonConvert.SerializeObject(list);
 
                     Console.WriteLine(Jsonresult);
-
                     conn.Close();
-                    return " ";
+                    return Jsonresult;
                 }
                 catch (Exception e)
                 {
@@ -296,7 +287,7 @@ namespace Server1
                     string sendChatID = "";
                     conn.Open();
                     Console.WriteLine(jsonData);
-                    string InsertQuery = $"insert into chatRoom(user_id, date, modification_date) values('{jsonData.USER_ID}', '{jsonData.POST_TIME}', '{jsonData.MODIFY_TIME}')";
+                    string InsertQuery = $"insert into chatting(chatR_id, isuser, content, emtion, transit_time) values('{jsonData.CHATR_ID}', {jsonData.ISUSER}, '{jsonData.CONTENT}', '{jsonData.EMOTION}', now())";
                     Console.Write("SQL insert start!");
 
                     // command connection
@@ -304,20 +295,8 @@ namespace Server1
                     if (cmd.ExecuteNonQuery() == 1)
                     {
                         Console.Write("Insert success!");
-                        string searchQuery = $"select chatR_id from chatRoom where user_id='{jsonData.USER_ID}' and date='{jsonData.POST_TIME}' and modification_date='{jsonData.MODIFY_TIME}'";
-
-
-                        // command connection
-                        MySqlCommand cmd2 = new MySqlCommand(searchQuery, conn);
-                        MySqlDataReader DBresult = cmd2.ExecuteReader();
-                        if (DBresult.Read())
-                        {
-                            Console.WriteLine($"result {DBresult["chatR_id"]}");
-                            sendChatID = DBresult["chatR_id"].ToString();
-                        }
-
                         conn.Close();
-                        return sendChatID;
+                        return "success";
                         // 회원가입 완료됐다~
                     }
                     else
