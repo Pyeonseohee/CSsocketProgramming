@@ -326,10 +326,10 @@ namespace Server1
                 Console.Write("success connection!");
                 try
                 {
-                    string sendChatID = "";
+                    string getEmotion = "";
                     conn.Open();
                     Console.WriteLine(jsonData);
-                    string searchQuery = $"select emtion from log where user_id='{jsonData.USER_ID}' date={DateTime.Now.ToString("yyyy-MM-dd")}";
+                    string searchQuery = $"select emtion from log where user_id='{jsonData.USER_ID}' and date_format(date, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')";
 
                     // command connection
                     MySqlCommand cmd = new MySqlCommand(searchQuery, conn);
@@ -337,13 +337,14 @@ namespace Server1
                     if (DBresult.Read())
                     {
                         Console.WriteLine($"result {DBresult["emtion"]}");
+                        getEmotion = DBresult["emtion"].ToString();
                         conn.Close();
-                        return DBresult["emtion"].ToString();
+                        return getEmotion;
                     }
                     else
                     {
                         conn.Close();
-                        return "";
+                        return "not exist";
                         // DB 오류났다~
                     }
                 }

@@ -176,10 +176,16 @@ namespace Server1
                             res = PostChattingHandler(jsonObject);
                             Console.WriteLine(res);
                         }
-                        else if(jsonObject.ROUTE == "GetChatting")
+                        else if (jsonObject.ROUTE == "GetChatting")
                         {
                             Console.WriteLine("get chatting route!");
                             res = GetChattingHandler(jsonObject);
+                            Console.WriteLine(res);
+                        }
+                        else if(jsonObject.ROUTE == "GetEmotion")
+                        {
+                            Console.WriteLine("get emotion route!");
+                            res = GetEmotionHandler(jsonObject);
                             Console.WriteLine(res);
                         }
                         else
@@ -248,6 +254,12 @@ namespace Server1
         public static string PostChattingHandler(dynamic jsonData)
         {
             return SQLClass.PostChattingSQL(jsonData);
+        }
+
+        // Get Emotion(today's emotion)
+        public static string GetEmotionHandler(dynamic jsonData)
+        {
+            return SQLClass.GetEmotionSQL(jsonData);
         }
     }
 }
