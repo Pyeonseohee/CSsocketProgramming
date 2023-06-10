@@ -124,7 +124,7 @@ namespace Server1
                     while(DBresult.Read())
                     {
                         string emotion = DBresult["emtion"].ToString(); // 내용 컬럼 값
-                        string date = DBresult["date"].ToString().Substring(0, 8); // 날짜 컬럼 값
+                        string date = DBresult["date"].ToString().Split(" ")[0]; // 날짜 컬럼 값
                         Console.WriteLine("date: "+ date);
                         int day = Convert.ToDateTime(date).Day; // 날짜에서 일(day) 값을 추출합니다.
                         Console.WriteLine("감정: "+ emotion);
